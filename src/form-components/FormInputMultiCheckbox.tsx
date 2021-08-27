@@ -1,27 +1,32 @@
-import React, { useEffect, useState } from "react";
 import {
   Checkbox,
   FormControl,
   FormControlLabel,
   FormLabel,
+  FormGroup,
 } from "@material-ui/core";
+// import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import { FormInputProps } from "./FormInputProps";
 
 const options = [
   {
+    key: 1,
     label: "Mountain",
     value: "mountain",
   },
   {
+    key: 2,
     label: "Lake",
     value: "lake",
   },
   {
+    key: 3,
     label: "Park",
     value: "park",
   },
   {
+    key: 4,
     label: "Other",
     value: "other",
   },
@@ -31,57 +36,68 @@ export const FormInputMultiCheckbox: React.FC<FormInputProps> = ({
   name,
   control,
   setValue,
+  getValues,
   label,
 }) => {
-  //state
-  const [selectedItems, setSelectedItems] = useState<any>(["local"]); // TODO set default from form default
-
+  
   // handlers
   const handleSelect = (value: any) => {
+    const selectedItems = getValues(name);
     const isPresent = selectedItems.indexOf(value);
     if (isPresent !== -1) {
       const remaining = selectedItems.filter((item: any) => item !== value);
-      setSelectedItems(remaining);
+      setValue(name, remaining, { shouldDirty: true });
     } else {
-      setSelectedItems((prevItems: any) => [...prevItems, value]);
+      setValue(name, [...selectedItems, value], { shouldDirty: true });
     }
   };
 
-  // set value
-  useEffect(() => {
-    console.log('checkbox effect', name, selectedItems);
-    setValue(name, selectedItems);
-  }, [selectedItems, name, setValue]);
-
+  // useEffect(() => {
+  //   const selectedItems = getValues(name);
+  //   console.log('effect', selectedItems);
+  //   setValue(name, selectedItems, { shouldDirty: true })
+  // }, [name, setValue, getValues])
 
   return (
     <FormControl size={"small"} variant={"outlined"}>
       <FormLabel component="legend">{label}</FormLabel>
-
-      <div>
-        {options.map((option: any) => {
+      <Controller
+        name={name}
+        control={control}
+        render={({
+          field: { onChange: cbsetOnChange, value: fieldValue },
+          fieldState,
+          formState,
+        }) => {
+         // console.log('in render', fieldState, fieldValue, formState);
           return (
-            <FormControlLabel
-              control={
-                <Controller
-                  name={name}
-                  render={() => {
-                    return (
-                      <Checkbox
-                        checked={selectedItems.includes(option.value)}
-                        onChange={() => handleSelect(option.value)}
+            <div>
+              checkbox {fieldValue.length}
+              <FormGroup row>
+                {options.map((option) => {
+                  // console.log(option)
+                  return (
+                    <FormControlLabel
+                      label={option.label}
+                      value={option.value}
+                      key={option.key}
+                      control={<Checkbox
+                        checked={fieldValue.includes(option.value)}
+                        onChange={(e) => {
+                          // console.log("props", props, e);
+                          handleSelect(option.value);
+                        }}
                       />
-                    );
-                  }}
-                  control={control}
-                />
-              }
-              label={option.label}
-              key={option.value}
-            />
+                        
+                      }
+                    />
+                  );
+                })}
+              </FormGroup>
+            </div>
           );
-        })}
-      </div>
+        }}
+      />
     </FormControl>
   );
 };

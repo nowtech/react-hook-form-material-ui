@@ -1,4 +1,3 @@
-
 import DateFnsUtils from "@date-io/date-fns";
 import {
   KeyboardDatePicker,
@@ -14,11 +13,14 @@ export const FormInputDate = ({ name, control, label }: FormInputProps) => {
       <Controller
         name={name}
         control={control}
-        render={({ field, fieldState, formState }) => (
+        render={({
+          field: { onChange, value },
+          fieldState,
+          formState,
+        }) => (
           <KeyboardDatePicker
             fullWidth
             variant="inline"
-            defaultValue={new Date()}
             id={`date-${Math.random()}`}
             label={label}
             rifmFormatter={(val) => val.replace(/[^[a-zA-Z0-9-]*$]+/gi, "")}
@@ -28,7 +30,8 @@ export const FormInputDate = ({ name, control, label }: FormInputProps) => {
               "aria-label": "change date",
             }}
             format={DATE_FORMAT}
-            {...field}
+            value={value}
+            onChange={onChange}
           />
         )}
       />

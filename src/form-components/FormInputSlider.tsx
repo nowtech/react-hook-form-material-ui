@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+// import React from "react";
 import { FormLabel, Slider } from "@material-ui/core";
 import { Controller } from "react-hook-form";
 import { FormInputProps } from "./FormInputProps";
@@ -6,7 +6,7 @@ import { FormInputProps } from "./FormInputProps";
 export const FormInputSlider = ({
   name,
   control,
-  // setValue,
+  setValue,
   label,
 }: FormInputProps) => {
   // state
@@ -17,9 +17,11 @@ export const FormInputSlider = ({
   //   if (sliderValue) setValue(name, sliderValue);
   // }, [sliderValue, name, setValue]);
 
-  // const handleChange = (event: any, newValue: number | number[]) => {
-  //   setSliderValue(newValue as number);
-  // };
+  const handleChange = (event: any, newValue: number | number[]) => {
+    setValue(name, newValue as number);
+  };
+
+  
 
   return (
     <>
@@ -27,10 +29,14 @@ export const FormInputSlider = ({
       <Controller
         name={name}
         control={control}
-        render={() => ( // TODO field, fieldState, formState, or onChange, value 
+        render={({
+          field: { onChange, value },
+          fieldState,
+          formState,
+        }) => ( 
           <Slider
-            // value={value}
-            // onChange={onChange}
+            value={value}
+            onChange={handleChange}
             valueLabelDisplay="auto"
             min={0}
             max={100}

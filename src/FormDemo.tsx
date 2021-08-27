@@ -4,7 +4,7 @@ import { FormInputText } from "./form-components/FormInputText";
 import { FormInputMultiCheckbox } from "./form-components/FormInputMultiCheckbox";
 import { FormInputDropdown } from "./form-components/FormInputDropdown";
 import { FormInputDate } from "./form-components/FormInputDate";
-// import { FormInputSlider } from "./form-components/FormInputSlider";
+import { FormInputSlider } from "./form-components/FormInputSlider";
 import { FormInputRadio } from "./form-components/FormInputRadio";
 
 interface IFormInput {
@@ -19,18 +19,17 @@ interface IFormInput {
 const defaultValues = {
   textValue: "",
   radioValue: "",
-  checkboxValue: ["mountain"],
+  checkboxValue: [],
   dateValue: new Date(),
   dropdownValue: "",
-  sliderValue: 80,
+  sliderValue: 0,
 };
 export const FormDemo = () => {
   const methods = useForm<IFormInput>({ defaultValues: defaultValues });
-  const { handleSubmit, reset, control, setValue } = methods; // watch
-  const onSubmit = (data: IFormInput) => console.log(data);
+  const { handleSubmit, reset, control, setValue, getValues } = methods;
 
-  // const data:any = defaultValues; //TODO define type
-  // const watchdata = watch(data, defaultValues);
+  const onSubmit = (data: IFormInput) =>
+    console.log(">>>> ", data);
 
   return (
     <Paper
@@ -54,19 +53,22 @@ export const FormDemo = () => {
         control={control}
         label="Dropdown Input"
       />
-      <FormInputDate name="dateValue" control={control} label="Date Input" />
       <FormInputMultiCheckbox
         control={control}
         setValue={setValue}
+        getValues={getValues}
         name={"checkboxValue"}
-        label={"Checkbox Input"}
+        label={"Checkbox Cluster"}
       />
-      {/* <FormInputSlider
+      <FormInputSlider
         name={"sliderValue"}
         control={control}
-        // setValue={setValue}
+        setValue={setValue}
+        getValues={getValues}
         label={"Slider Input"}
-      /> */}
+      />
+
+      <FormInputDate name="dateValue" control={control} label="Date Input" />
 
       <Button onClick={handleSubmit(onSubmit)} variant={"contained"}>
         {" "}

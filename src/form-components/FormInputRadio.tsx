@@ -11,14 +11,17 @@ import { FormInputProps } from "./FormInputProps";
 
 const options = [
   {
+    key: 1,
     label: "Free",
     value: "free",
   },
   {
+    key:2,
     label: "Paid",
     value: "paid",
   },
   {
+    key:3,
     label: "Koha",
     value: "koha",
   },
@@ -34,6 +37,7 @@ export const FormInputRadio: React.FC<FormInputProps> = ({
       <FormControlLabel
         value={singleOption.value}
         label={singleOption.label}
+        key={singleOption.key}
         control={<Radio />}
       />
     ));
